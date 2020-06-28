@@ -1,5 +1,6 @@
 package com.inmost.tasktracker.service.impl;
 
+import com.inmost.tasktracker.exception.DataProcessingException;
 import com.inmost.tasktracker.model.User;
 import com.inmost.tasktracker.repository.UserRepository;
 import com.inmost.tasktracker.service.UserService;
@@ -20,7 +21,7 @@ public class UserServiceImpl implements UserService {
     public User get(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new RuntimeException("Failed to find a user with id: " + userId));
+                        new DataProcessingException("Failed to find a user with id: " + userId));
     }
 
     @Override
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findById(user.getUserId()).isPresent()) {
             return userRepository.save(user);
         } else {
-            throw new RuntimeException("Failed to find a user with id: " + user.getUserId());
+            throw new DataProcessingException("Failed to find a user with id: " + user.getUserId());
         }
     }
 
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
         } else {
-            throw new RuntimeException("Failed to find a user with id: " + userId);
+            throw new DataProcessingException("Failed to find a user with id: " + userId);
         }
     }
 }

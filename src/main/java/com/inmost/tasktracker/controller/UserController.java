@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -34,12 +37,12 @@ public class UserController {
     }
 
     @PutMapping
-    public UserDto update(@RequestBody UserDto userDto) {
+    public UserDto update(@RequestBody @Valid UserDto userDto) {
         return mapUserToUserDto(userService.update(mapUserDtoToUser(userDto)));
     }
 
     @GetMapping
-    public List<UserDto> getAll(@RequestParam(name = "page") int pageNumber) {
+    public List<UserDto> getAll(@RequestParam(name = "page") @Min(0) int pageNumber) {
         return userService.getAll(pageNumber).stream()
                 .map(this::mapUserToUserDto)
                 .collect(Collectors.toList());
