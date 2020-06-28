@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    List<Task> findTasksByStatus_StatusName(String taskStatusName);
-}
+    List<Task> findAllByStatus_StatusNameOrderByAssignee_UserIdDesc(String taskStatusName);
 
+    List<Task> findAllByStatus_StatusNameOrderByAssignee_UserIdAsc(String taskStatusName);
+
+    List<Task> getAllByAssigneeNotNullOrderByAssignee_UserIdDesc();
+
+    List<Task> getAllByAssigneeNotNullOrderByAssignee_UserIdAsc();
+}

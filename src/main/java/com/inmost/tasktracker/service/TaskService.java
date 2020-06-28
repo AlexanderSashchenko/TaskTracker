@@ -6,13 +6,13 @@ import java.util.List;
 public interface TaskService {
     Task add(Task task);
 
-    Task update(Task task);
-
     Task get(long taskId);
 
+    List<Task> getAllSortedFilterByStatus(String sortingType, String taskStatusName);
+
+    List<Task> getAllSorted(String sortingType);
+
+    Task update(Task task);
+
     void delete(long taskId);
-
-    List<Task> getAll(String taskStatusName);
-
-    List<Task> getAll();
 }

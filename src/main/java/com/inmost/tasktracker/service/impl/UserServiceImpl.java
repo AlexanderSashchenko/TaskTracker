@@ -17,16 +17,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User add(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User update(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
     public User get(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() ->
@@ -34,12 +24,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(long userId) {
-        userRepository.deleteById(userId);
+    public List<User> getAll(int pageNumber) {
+        return userRepository.findAll(PageRequest.of(pageNumber, PAGE_SIZE)).getContent();
     }
 
     @Override
-    public List<User> getAll(int pageNumber) {
-        return userRepository.findAll(PageRequest.of(pageNumber, PAGE_SIZE)).getContent();
+    public User update(User user) {
+        if (userRepository.findById(user.getUserId()).isPresent()) {
+            return userRepository.save(user);
+        } else {
+            throw new RuntimeException("Failed to find a user with id: " + user.getUserId());
+        }
+    }
+
+    @Override
+    public void delete(long userId) {
+        if (userRepository.findById(userId).isPresent()) {
+            userRepository.deleteById(userId);
+        } else {
+            throw new RuntimeException("Failed to find a user with id: " + userId);
+        }
     }
 }
