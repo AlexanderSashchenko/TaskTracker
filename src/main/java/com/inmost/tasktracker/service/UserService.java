@@ -4,13 +4,11 @@ import com.inmost.tasktracker.model.User;
 import java.util.List;
 
 public interface UserService {
-    User add(User user);
+    User get(long userId);
+
+    List<User> getAll(int pageNumber);
 
     User update(User user);
 
-    User get(long userId);
-
     void delete(long userId);
-
-    List<User> getAll(int pageNumber);
 }
