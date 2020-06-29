@@ -4,7 +4,9 @@ import com.inmost.tasktracker.model.User;
 import java.util.List;
 
 public interface UserService {
-    User get(long userId);
+    User getById(long userId);
+
+    User getByUsername(String username);
 
     List<User> getAll(int pageNumber);
 

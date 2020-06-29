@@ -1,13 +1,15 @@
 package com.inmost.tasktracker.validation;
 
+import com.inmost.tasktracker.exception.CustomAuthenticationException;
+import com.inmost.tasktracker.exception.DataProcessingException;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.inmost.tasktracker.exception.DataProcessingException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,15 +21,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {
             DataProcessingException.class,
             IllegalArgumentException.class,
+            CustomAuthenticationException.class
     })
     protected ResponseEntity<Object> handleBadRequest(
             Exception exception, WebRequest request) {
@@ -42,11 +42,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(value = { ConstraintViolationException.class })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Object> handleResourceNotFoundException(ConstraintViolationException exception,
-                                                                  WebRequest request) {
+    public ResponseEntity<Object> handleResourceNotFoundException(
+            ConstraintViolationException exception,
+            WebRequest request) {
         Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
         StringBuilder strBuilder = new StringBuilder();
-        for (ConstraintViolation<?> violation : violations ) {
+        for (ConstraintViolation<?> violation : violations) {
             strBuilder.append(violation.getMessage());
             strBuilder.append("\n");
         }

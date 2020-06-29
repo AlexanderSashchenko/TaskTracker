@@ -1,13 +1,16 @@
 package com.inmost.tasktracker.controller;
 
 import com.inmost.tasktracker.model.User;
-import com.inmost.tasktracker.model.dto.UserDto;
+import com.inmost.tasktracker.model.dto.UserResponseDto;
 import com.inmost.tasktracker.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-
 @RestController
 @RequestMapping("/users")
+@Validated
 public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -32,33 +33,35 @@ public class UserController {
     }
 
     @GetMapping("/{user-id}")
-    public UserDto get(@PathVariable("user-id") long userId) {
-        return mapUserToUserDto(userService.get(userId));
+    public UserResponseDto get(@PathVariable("user-id") @Min(value = 1,
+            message = "User id should not be less than 1") long userId) {
+        return mapUserToUserDto(userService.getById(userId));
     }
 
     @PutMapping
-    public UserDto update(@RequestBody @Valid UserDto userDto) {
-        return mapUserToUserDto(userService.update(mapUserDtoToUser(userDto)));
+    public UserResponseDto update(@RequestBody @Valid UserResponseDto userResponseDto) {
+        return mapUserToUserDto(userService.update(mapUserDtoToUser(userResponseDto)));
     }
 
     @GetMapping
-    public List<UserDto> getAll(@RequestParam(name = "page") @Min(0) int pageNumber) {
+    public List<UserResponseDto> getAll(@RequestParam(name = "page") @Min(0) int pageNumber) {
         return userService.getAll(pageNumber).stream()
                 .map(this::mapUserToUserDto)
                 .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{user-id}")
-    public ResponseEntity<Void> delete(@PathVariable("user-id") long userId) {
+    public ResponseEntity<Void> delete(@PathVariable("user-id") @Min(value = 1,
+            message = "User id should not be less than 1") long userId) {
         userService.delete(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private UserDto mapUserToUserDto(User user) {
-        return modelMapper.map(user, UserDto.class);
+    private UserResponseDto mapUserToUserDto(User user) {
+        return modelMapper.map(user, UserResponseDto.class);
     }
 
-    private User mapUserDtoToUser(UserDto userDto) {
-        return modelMapper.map(userDto, User.class);
+    private User mapUserDtoToUser(UserResponseDto userResponseDto) {
+        return modelMapper.map(userResponseDto, User.class);
     }
 }
