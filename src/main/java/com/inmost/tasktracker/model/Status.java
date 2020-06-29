@@ -13,7 +13,7 @@ import lombok.Data;
 @Table(name = "statuses")
 public class Status {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "status_id")
     private long statusId;
     @Column(name = "status_name")

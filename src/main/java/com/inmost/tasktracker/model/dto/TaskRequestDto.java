@@ -1,9 +1,8 @@
 package com.inmost.tasktracker.model.dto;
 
 import com.inmost.tasktracker.validation.StatusValidator;
-import lombok.Data;
-
 import javax.validation.constraints.NotBlank;
+import lombok.Data;
 
 @Data
 public class TaskRequestDto {

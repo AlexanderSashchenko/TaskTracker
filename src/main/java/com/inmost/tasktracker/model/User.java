@@ -13,7 +13,7 @@ import lombok.Data;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private long userId;
     @Column(name = "first_name")
@@ -22,5 +22,6 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    @Column(unique = true, length = 55)
     private String username;
 }

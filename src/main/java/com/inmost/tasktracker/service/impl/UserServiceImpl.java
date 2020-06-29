@@ -18,10 +18,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User get(long userId) {
+    public User getById(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() ->
                         new DataProcessingException("Failed to find a user with id: " + userId));
+    }
+
+    @Override
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                new DataProcessingException("Failed to find a user with username: " + username));
     }
 
     @Override

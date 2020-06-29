@@ -1,7 +1,6 @@
 package com.inmost.tasktracker.validation.impl;
 
 import com.inmost.tasktracker.validation.StatusValidator;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
