@@ -4,8 +4,4 @@ public class CustomAuthenticationException extends RuntimeException {
     public CustomAuthenticationException(String message, Exception e) {
         super(message);
     }
-
-    public CustomAuthenticationException(String message) {
-        super(message);
-    }
 }
